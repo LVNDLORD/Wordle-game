@@ -73,3 +73,7 @@ h1 {
     align-items: center;
     margin: 0.2rem;
 }
+
+.message-container {
+    height: 3rem;
+}

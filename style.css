@@ -58,3 +58,18 @@ h1 {
 .key-container button:nth-child(28) {
     width:6.8rem;
 }
+
+.tile-container div {
+    display: flex;
+}
+
+.tile-container .tile {
+    width: 6.2rem;
+    height: 6.2rem;
+    border: 0.2rem solid #3a3a3c;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0.2rem;
+}

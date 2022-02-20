@@ -3,7 +3,7 @@
 const tileDisplay = document.querySelector('.tile-container');
 const keyboard = document.querySelector('.key-container');
 const messageDisplay = document.querySelector('.message-container');
-
+const endMessage = document.querySelector('.end-message-container');
 const allKeyboardCharacters = 'qwertyuiopasdfghjklzxcvbnm'.toUpperCase();
 let wordle;
 
@@ -11,7 +11,6 @@ const getWordle = () => {
     fetch('http://localhost:8000/word')
         .then(response => response.json())
         .then(json => {
-            console.log(json);
             wordle = json.toUpperCase();
         })
         .catch(err => console.log(err));
@@ -20,8 +19,7 @@ getWordle();
 
 const keys = Array.from(allKeyboardCharacters);
 keys.splice(19, 0, 'Enter');
-keys.push('«'); 
-console.log(keys);
+keys.push('«');
 
 const guessRows = [
     ['', '', '', '', ''],
@@ -58,17 +56,16 @@ keys.forEach(key => {
 });
 
 const handleClick = (letter) => {
-    console.log('clicked', letter);
-    if (letter === '«') {
-        console.log('delete letter');
-        deleteLetter();
-        return;
-    } if (letter === 'Enter') {
-        console.log('check the row');
-        checkRow();
-        return;
+    if (!isGameOver) {
+        if (letter === '«') {
+            deleteLetter();
+            return;
+        } if (letter === 'Enter') {
+            checkRow();
+            return;
+        }
+        addLetter(letter);
     }
-    addLetter(letter);
 };
 
 const addLetter = (letter) => {
@@ -78,7 +75,6 @@ const addLetter = (letter) => {
         guessRows[currentRow][currentTile] = letter; // same as writing GuessRows[0,0] and replacing this value with a letter
         tile.setAttribute('data', letter); // for coloring
         currentTile++;
-        console.log('guessRow', guessRows);
     }
 };
 
@@ -89,7 +85,6 @@ const deleteLetter = () => {
         tile.textContent = '';
         guessRows[currentRow][currentTile] = '';
         tile.setAttribute('data', '');
-        console.log('guessRow', guessRows);
     }
 };
 
@@ -97,9 +92,11 @@ const checkRow = () => {
     const guess = guessRows[currentRow].join('');
     if (currentTile > 4) {
         flipTile();
-        console.log(`my guess is ${guess}, wordle is ${wordle}`);
+        console.log(`my guess is ${guess}, wordle is ${wordle}`); //uncomment to see word
         if (wordle === guess) {
-            showMessage('Good Job. Well done!');
+            setTimeout(() => {
+                showMessage('Good Job. Well done!');
+            }, 2500);
             isGameOver = true;
         } else {
             if (currentRow >= 5) {
@@ -117,9 +114,13 @@ const checkRow = () => {
 
 const showMessage = (message) => {
     const messageEl = document.createElement('p');
+    const endMessageEl = document.createElement('p'); //
     messageEl.textContent = message;
+    endMessageEl.textContent = `Correct word - ${wordle}`; //
     messageDisplay.append(messageEl);
+    endMessage.append(endMessageEl); //
     setTimeout(() => messageDisplay.removeChild(messageEl), 5000);
+    setTimeout(() => endMessage.removeChild(endMessageEl), 5000);//
 }
 
 const addColorToKey = (keyLetter, style) => {
@@ -157,5 +158,4 @@ const flipTile = () => {
             addColorToKey(guess[index].letter, guess[index].color);
         }, 500 * index);
     })
-
 }

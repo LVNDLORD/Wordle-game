@@ -55,6 +55,12 @@ h1 {
     border: none;
     background-color: var(--color-light-gray);
     margin: 0.4rem;
+    cursor: pointer;
+}
+
+.key-container button:active {
+    box-shadow: 0 2px #666;
+    transform: translateY(2px);
 }
 
 .key-container button:nth-child(11) {
@@ -81,16 +87,18 @@ h1 {
     margin: 0.2rem;
 }
 
-.message-container {
-    height: 3rem;
+.message-container, .end-message-container {
+    height: 5rem;
 }
 
-.message-container p{
+.message-container p, .end-message-container p {
     background-color: var(--color-light-gray);
     border-radius: 1rem;
     padding: 1rem;
     margin: 0;
+    font-size: 3rem;
 }
+
 
 .tile.flip {
     animation: 0.5s linear flipping;

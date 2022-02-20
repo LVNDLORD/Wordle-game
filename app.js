@@ -5,12 +5,22 @@ const keyboard = document.querySelector('.key-container');
 const messageDisplay = document.querySelector('.message-container');
 
 const allKeyboardCharacters = 'qwertyuiopasdfghjklzxcvbnm'.toUpperCase();
-const wordle = 'SUPER';
+let wordle;
+
+const getWordle = () => {
+    fetch('http://localhost:8000/word')
+        .then(response => response.json())
+        .then(json => {
+            console.log(json);
+            wordle = json.toUpperCase();
+        })
+        .catch(err => console.log(err));
+}
+getWordle();
+
 const keys = Array.from(allKeyboardCharacters);
-// const keyPressed = e => console.log(e.key);
-// document.addEventListener('keydown', keyPressed);
 keys.splice(19, 0, 'Enter');
-keys.push('«'); //backspace
+keys.push('«'); 
 console.log(keys);
 
 const guessRows = [
@@ -112,17 +122,40 @@ const showMessage = (message) => {
     setTimeout(() => messageDisplay.removeChild(messageEl), 5000);
 }
 
+const addColorToKey = (keyLetter, style) => {
+    const key = document.getElementById(keyLetter);
+    key.classList.add(style);
+}
+
 const flipTile = () => {
     const rowTiles = document.querySelector(`#guessRow-${currentRow}`).childNodes; // grabbing the guess row and getting all the children
-    rowTiles.forEach((tile, index) => {
-        const dataLetter = tile.getAttribute('data');
+    let checkWordle = wordle; // pulling out the guess word, check each letter, and by index setting color
+    const guess = [];
 
-        if (dataLetter === wordle[index]) {
-            tile.classList.add('green-overlay');
-        } else if (wordle.includes(dataLetter)) {
-            tile.classList.add('yellow-overlay');
-        } else {
-            tile.classList.add('grey-overlay');
+    rowTiles.forEach(tile => {
+        guess.push({ letter: tile.getAttribute('data'), color: 'grey-overlay' });
+    })
+
+    guess.forEach((guess, index) => {
+        if (guess.letter == wordle[index]) {
+            guess.color = 'green-overlay';
+            checkWordle = checkWordle.replace(guess.letter, '');
         }
     })
+
+    guess.forEach(guess => {
+        if (checkWordle.includes(guess.letter)) {
+            guess.color = 'yellow-overlay';
+            checkWordle = checkWordle.replace(guess.letter, '');
+        }
+    })
+
+    rowTiles.forEach((tile, index) => {
+        setTimeout(() => {
+            tile.classList.add('flip');
+            tile.classList.add(guess[index].color);
+            addColorToKey(guess[index].letter, guess[index].color);
+        }, 500 * index);
+    })
+
 }

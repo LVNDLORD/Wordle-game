@@ -4,6 +4,8 @@ const tileDisplay = document.querySelector('.tile-container');
 const keyboard = document.querySelector('.key-container');
 const messageDisplay = document.querySelector('.message-container');
 const endMessage = document.querySelector('.end-message-container');
+// const playAgain = document.querySelector('.new-game'); /// -------------
+// const btnNewGame = document.querySelector('.btn-new-game'); /// -------------
 const allKeyboardCharacters = 'qwertyuiopasdfghjklzxcvbnm'.toUpperCase();
 let wordle;
 
@@ -96,12 +98,14 @@ const checkRow = () => {
         if (wordle === guess) {
             setTimeout(() => {
                 showMessage('Good Job. Well done!');
+                // newGame(); /// -------------
             }, 2500);
             isGameOver = true;
         } else {
             if (currentRow >= 5) {
                 isGameOver = true;
                 showMessage('Game over. Better luck next time')
+                // newGame(); /// ---------------
                 return;
             }
             if (currentRow < 5) {
@@ -159,3 +163,33 @@ const flipTile = () => {
         }, 500 * index);
     })
 }
+
+// const newGame = document.createElement('div');
+// newGame.classList.add('new-game');
+// newGame.innerHTML = '<button class="btn btn--play-again">Play Again!</button>';
+
+// tileDisplay.append(newGame);
+
+
+
+// const newGame = () => { ///--------------------------------------------------------
+//     isGameOver = false; // reset game
+//     currentRow = 0;
+//     currentTile = 0;
+//     const newGameEl = document.createElement('p');
+//     newGameEl.textContent = 'Play Again';
+//     playAgain.append(newGameEl);
+
+
+//     // const rowTiles.forEach(tile => {
+//     //     guess.push({ letter: tile.getAttribute('data'), color: 'grey-overlay' });
+//     // });
+//     // // remove colors
+//     // document.getAttribute('data'), color: 'grey-overlay';
+//   // empty tiles
+//     getWordle(); // get new word
+// }
+
+// btnNewGame.addEventListener('click', function () {
+//     newGame(e); /// -------------
+// });

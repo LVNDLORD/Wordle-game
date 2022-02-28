@@ -99,6 +99,12 @@ h1 {
     font-size: 3rem;
 }
 
+.new-game {
+    display: flex;
+    height: 5rem;
+    margin-top: 2rem;
+    justify-content: center;
+}
 
 .tile.flip {
     animation: 0.5s linear flipping;
